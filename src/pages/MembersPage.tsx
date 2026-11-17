@@ -92,19 +92,18 @@ export function MembersPage({ store, selectedId, onSelect, onOpenSignup }: { sto
                 rowKey={(r) => r.id}
                 empty="Chưa giới thiệu khách nào. Gửi link ở trên cho bạn bè."
                 columns={[
-                  { key: 'customerName', header: 'Khách', primary: true, render: (r) => <span>{r.customerName} <span className="hint">· {r.id}</span></span> },
-                  { key: 'service', header: 'Dịch vụ' },
-                  { key: 'date', header: 'Ngày', render: (r) => fmtDate(r.date) },
+                  { key: 'customerName', header: 'Khách', primary: true, render: (r) => <span className="cell-main" title={r.note}>{r.customerName} <span className="hint">· {r.id}</span><span className="hint cell-sub mobile-only">{r.note}</span></span> },
+                  { key: 'service', header: 'Dịch vụ', render: (r) => <span className="nowrap">{r.service}</span> },
+                  { key: 'date', header: 'Ngày', render: (r) => <span className="nowrap">{fmtDate(r.date)}</span> },
                   { key: 'status', header: 'Trạng thái', render: (r) => <StatusBadge status={r.status} /> },
                   { key: 'referrerReward', header: 'Ưu đãi nhận', align: 'right', render: (r) => formatVnd(r.referrerReward) },
-                  { key: 'note', header: 'Ghi chú', render: (r) => <span className="hint">{r.note}</span> },
                 ]}
                 actions={(r) =>
                   PENDING_STATUSES.includes(r.status) ? (
-                    <>
+                    <span className="act">
                       <button type="button" className="btn btn-sm btn-primary" onClick={() => setRef(r, confirmPayment(r, a), `${r.id}: thanh toán thành công, cộng ${formatVnd(a.referrerReward)} cho ${member.name}`)}>Xác nhận TT</button>
                       <button type="button" className="btn btn-sm" onClick={() => setRef(r, cancelReferral(r), `${r.id}: đã hủy`)}>Hủy</button>
-                    </>
+                    </span>
                   ) : null
                 }
               />

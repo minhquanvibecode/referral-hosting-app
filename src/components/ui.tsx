@@ -189,18 +189,18 @@ export function ResponsiveTable<T>({ columns, rows, rowKey, actions, empty = 'Ch
           <thead>
             <tr>
               {columns.map((c) => (
-                <th key={c.key} className={c.align === 'right' ? 'num' : undefined}>{c.header}</th>
+                <th key={c.key} className={c.align === 'right' ? 'num-cell' : undefined}>{c.header}</th>
               ))}
-              {actions && <th className="num">Thao tác</th>}
+              {actions && <th className="actions-cell">Thao tác</th>}
             </tr>
           </thead>
           <tbody>
             {rows.map((r) => (
               <tr key={rowKey(r)}>
                 {columns.map((c) => (
-                  <td key={c.key} className={c.align === 'right' ? 'num' : undefined}>{cell(c, r)}</td>
+                  <td key={c.key} className={c.align === 'right' ? 'num-cell' : undefined}>{c.align === 'right' ? <span className="num">{cell(c, r)}</span> : cell(c, r)}</td>
                 ))}
-                {actions && <td className="num">{actions(r)}</td>}
+                {actions && <td className="actions-cell">{actions(r)}</td>}
               </tr>
             ))}
           </tbody>

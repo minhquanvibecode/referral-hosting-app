@@ -57,12 +57,15 @@ export function RulesPage({ assumptions: a }: { assumptions: Assumptions }) {
             rows={services}
             rowKey={(s) => s.name}
             columns={[
-              { key: 'name', header: 'Dịch vụ', primary: true },
-              { key: 'price', header: 'Doanh thu tháng đầu', align: 'right', render: (s) => formatVnd(s.price) },
-              { key: 'share', header: 'Ưu đãi 2 phía / giá', align: 'right', render: (s) => formatPercent(both / s.price) },
-              { key: 'market', header: 'Đối chiếu thị trường', render: (s) => <span className="hint">{s.market}</span> },
+              { key: 'name', header: 'Dịch vụ', primary: true, render: (s) => <span className="nowrap">{s.name}</span> },
+              { key: 'price', header: 'Giá tháng đầu', align: 'right', render: (s) => formatVnd(s.price) },
+              { key: 'share', header: 'Ưu đãi / giá', align: 'right', render: (s) => formatPercent(both / s.price) },
             ]}
           />
+          <h3>Đối chiếu giá thị trường</h3>
+          <ul className="plain hint">
+            {services.map((s) => <li key={s.name}><b>{s.name}</b>: {s.market}</li>)}
+          </ul>
         </section>
         <section className="card">
           <h2>Vì sao mức ưu đãi khả thi?</h2>
