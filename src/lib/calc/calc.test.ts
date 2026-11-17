@@ -121,3 +121,38 @@ describe('Dữ liệu & Excel', () => {
     expect(res.errors).toEqual([{ sheet: 'KD_GioiThieu', row: 4, column: 'DoanhThuThangDau_VND', message: 'phải là số' }])
   })
 })
+
+import { feasibility, sensitivity, serviceChecks } from './economics'
+import { services } from '../../config/seed'
+
+describe('Ngưỡng ưu đãi khả thi', () => {
+  it('BTC: mục tiêu 3 lần → tối đa 60.000 đ, đúng ngưỡng', () => {
+    const f = feasibility(A, 3)
+    expect(f).toMatchObject({ current: 60_000, maxByRatio: 60_000, maxByAds: 90_000, max: 60_000, binding: 'ratio', headroom: 0, ok: true })
+  })
+  it('mục tiêu 1,5 lần → bị chặn bởi quảng cáo 90.000 đ', () => {
+    expect(feasibility(A, 1.5)).toMatchObject({ maxByRatio: 120_000, max: 90_000, binding: 'ads', headroom: 30_000 })
+  })
+  it('vượt ngưỡng khi tăng ưu đãi', () => {
+    expect(feasibility({ ...A, newReward: 40_000 }, 3)).toMatchObject({ current: 70_000, headroom: -10_000, ok: false })
+  })
+  it('từng dịch vụ', () => {
+    const c = serviceChecks(services, A, 3)
+    expect(c.find((x) => x.name === 'Domain .vn')!.level).toBe('bad') // 59.000 / 60.000 < 1
+    expect(c.find((x) => x.name === 'Hosting Cơ bản')!.level).toBe('warn') // 2,48
+    expect(c.find((x) => x.name === 'Domain .com')!.level).toBe('good') // 7
+  })
+})
+
+describe('Độ nhạy ±10% lên doanh thu ròng', () => {
+  const s = sensitivity(A)
+  it('gốc 10.800.000 đ, DT TB/khách nguy hiểm nhất', () => {
+    expect(s.base).toBe(10_800_000)
+    expect(s.rows[0]).toMatchObject({ key: 'revenuePerCustomer', up: 1_620_000, down: -1_620_000 })
+  })
+  it('tỉ lệ tham gia & ưu đãi', () => {
+    const r = Object.fromEntries(s.rows.map((x) => [x.key, x]))
+    expect(r.participation).toMatchObject({ up: 1_080_000, down: -1_080_000 })
+    expect(r.referrerReward).toMatchObject({ up: -270_000, down: 270_000 })
+  })
+})

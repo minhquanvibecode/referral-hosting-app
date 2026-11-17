@@ -344,3 +344,49 @@ select { min-height: var(--tap); font: inherit; font-size: 16px; padding: 8px 12
 .rt-card .cell-main { display: block; }
 .rt-card .cell-sub { display: block; font-weight: 400; }
 .num-cell, .actions-cell { text-align: right; white-space: nowrap; }
+
+/* ===== Ngưỡng ưu đãi & độ nhạy ===== */
+.insight { display: grid; gap: 12px; align-content: start; }
+.insight h2, .insight h3 { margin: 0; }
+.insight-control { display: grid; gap: 6px; }
+.insight-control .segmented { width: 100%; }
+.feas-figures { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.feas-value { font-size: 22px; font-weight: 800; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.feas-value.tone-good { color: var(--good); }
+.feas-value.tone-warn { color: var(--warn); }
+.feas-value.tone-bad { color: var(--bad); }
+.meter { height: 12px; border-radius: 999px; background: var(--border); overflow: hidden; }
+.meter-fill { height: 100%; border-radius: inherit; background: var(--good); transition: width 0.2s; }
+.meter.tone-warn .meter-fill { background: var(--warn); }
+.meter.tone-bad .meter-fill { background: var(--bad); }
+.alert { border-radius: 10px; padding: 10px 12px; font-size: 14px; border: 1px solid; }
+.alert.good { border-color: var(--good); color: var(--good); background: color-mix(in srgb, var(--good) 8%, transparent); }
+.alert.warn { border-color: var(--warn); color: var(--warn); background: color-mix(in srgb, var(--warn) 8%, transparent); }
+.alert.bad { border-color: var(--bad); color: var(--bad); background: color-mix(in srgb, var(--bad) 8%, transparent); }
+.card .alert { margin-top: 12px; }
+.insight .alert { margin-top: 0; }
+.sens-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.sens-row { display: grid; gap: 4px; grid-template-columns: minmax(0, 1fr); }
+.sens-label { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 600; }
+.sens-rank { flex: none; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font-size: 13px; background: var(--border); color: var(--text); }
+.sens-rank.first { background: var(--warn); color: #fff; }
+.sens-bar { display: grid; grid-template-columns: 1fr 1fr; height: 14px; }
+.sens-half { display: flex; height: 100%; background: color-mix(in srgb, var(--border) 45%, transparent); }
+.sens-half.neg { justify-content: flex-end; border-right: 2px solid var(--muted); border-radius: 4px 0 0 4px; }
+.sens-half.pos { border-radius: 0 4px 4px 0; }
+.sens-half i { display: block; height: 100%; }
+.sens-half.neg i { background: var(--bad); border-radius: 4px 0 0 4px; }
+.sens-half.pos i { background: var(--good); border-radius: 0 4px 4px 0; }
+.sens-values { display: flex; justify-content: space-between; gap: 8px; font-size: 14px; }
+.positive { color: var(--good); }
+.negative { color: var(--bad); }
+.sw-good { background: var(--good); }
+@media (min-width: 768px) {
+  .insights { align-items: stretch; }
+  .insight-control { grid-template-columns: auto 1fr; align-items: center; }
+  .insight-control .segmented { min-width: 0; justify-self: end; width: auto; }
+}
+@media (min-width: 1024px) {
+  .sens-row { grid-template-columns: 170px minmax(0, 1fr); column-gap: 12px; align-items: center; }
+  .sens-values { grid-column: 2; }
+}

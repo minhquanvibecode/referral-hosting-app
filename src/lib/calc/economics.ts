@@ -89,3 +89,64 @@ export function scenario(a: Assumptions, factor: number): Assumptions {
     conversion: Math.min(1, a.conversion * factor),
   }
 }
+
+/* ---------- Ngưỡng ưu đãi khả thi ---------- */
+export type Feasibility = {
+  current: number // ưu đãi hiện tại/khách (đ)
+  maxByRatio: number // tối đa để DT/CP ≥ mục tiêu = DT TB ÷ mục tiêu (đ)
+  maxByAds: number // tối đa để vẫn rẻ hơn quảng cáo = CP quảng cáo/khách (đ)
+  max: number // ngưỡng khả thi = min(2 mức trên) (đ)
+  binding: 'ratio' | 'ads' // ràng buộc nào chặt hơn
+  headroom: number // còn tăng được bao nhiêu (âm = vượt ngưỡng) (đ)
+  ok: boolean
+}
+
+/**
+ * DT/CP = (Khách × DT TB) ÷ (Khách × Ưu đãi/khách) = DT TB ÷ Ưu đãi/khách — không phụ thuộc số khách.
+ * ⇒ Ưu đãi/khách tối đa để đạt mục tiêu T lần = DT TB ÷ T (làm tròn xuống đồng).
+ */
+export function feasibility(a: Assumptions, targetRatio: number): Feasibility {
+  const current = project(a).rewardPerCustomer
+  const maxByRatio = targetRatio > 0 ? Math.floor(a.revenuePerCustomer / targetRatio) : Infinity
+  const maxByAds = a.adCostPerCustomer
+  const max = Math.min(maxByRatio, maxByAds)
+  return { current, maxByRatio, maxByAds, max, binding: maxByRatio <= maxByAds ? 'ratio' : 'ads', headroom: max - current, ok: current <= max }
+}
+
+export type ServiceCheck = { name: string; price: number; ratio: number | null; level: 'good' | 'warn' | 'bad' }
+
+/** Từng dịch vụ: giá tháng đầu ÷ ưu đãi 2 phía. < 1: lỗ ngay tháng đầu · < mục tiêu: cần gia hạn mới bù · ≥ mục tiêu: tốt. */
+export function serviceChecks(services: { name: string; price: number }[], a: Assumptions, targetRatio: number): ServiceCheck[] {
+  const reward = project(a).rewardPerCustomer
+  return services.map((s) => {
+    const ratio = reward > 0 ? s.price / reward : null
+    const level = ratio === null || ratio >= targetRatio ? 'good' : ratio >= 1 ? 'warn' : 'bad'
+    return { name: s.name, price: s.price, ratio, level }
+  })
+}
+
+/* ---------- Độ nhạy ---------- */
+export const SENSITIVITY_KEYS: { key: keyof Assumptions; label: string }[] = [
+  { key: 'members', label: 'Số thành viên' },
+  { key: 'participation', label: 'Tỉ lệ tham gia' },
+  { key: 'referralsPerMember', label: 'Lượt giới thiệu/người' },
+  { key: 'conversion', label: 'Tỉ lệ chuyển đổi' },
+  { key: 'revenuePerCustomer', label: 'Doanh thu TB/khách' },
+  { key: 'referrerReward', label: 'Ưu đãi người giới thiệu' },
+  { key: 'newReward', label: 'Ưu đãi khách mới' },
+]
+
+export type SensitivityRow = { key: keyof Assumptions; label: string; up: number; down: number; impact: number }
+
+/** Đổi từng giả định ±step (mặc định 10%), giữ nguyên phần còn lại; đo thay đổi doanh thu ròng (DT − CP ưu đãi). Xếp giảm dần. */
+export function sensitivity(a: Assumptions, step = 0.1): { base: number; rows: SensitivityRow[] } {
+  const net = (x: Assumptions) => project(x).net
+  const base = net(a)
+  const rows = SENSITIVITY_KEYS.map(({ key, label }) => {
+    const up = net({ ...a, [key]: a[key] * (1 + step) }) - base
+    const down = net({ ...a, [key]: a[key] * (1 - step) }) - base
+    return { key, label, up, down, impact: Math.max(Math.abs(up), Math.abs(down)) }
+  })
+  rows.sort((x, y) => y.impact - x.impact || x.label.localeCompare(y.label))
+  return { base, rows }
+}

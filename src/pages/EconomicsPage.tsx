@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import type { Store } from '../App'
 import { Explain, KpiCard, NumberField, ResponsiveTable, SplitLayout, StickyActions, useToast } from '../components/ui'
 import { sampleAssumptions as D } from '../config/seed'
@@ -9,6 +9,8 @@ import { formatNumber, formatPercent, formatVnd } from '../lib/format'
 import { programSummary } from '../lib/summary'
 import { copyText, fromPct, toPct } from '../lib/view'
 import { MonthlyChart } from './MonthlyChart'
+import { FeasibilityCard, SensitivityCard, type Target } from './EconomicsInsights'
+import { feasibility } from '../lib/calc/economics'
 
 const money = (v: number) => formatNumber(v, 0)
 const ratioText = (r: number | null) => (r === null ? 'Không tính được' : `${r.toFixed(2).replace('.', ',')} lần`)
@@ -24,6 +26,8 @@ export function EconomicsPage({ store }: { store: Store }) {
   const scen = useMemo(() => SCENARIOS.map((s) => ({ ...s, p: project(scenario(a, s.factor)) })), [a])
   const actual = useMemo(() => programStats(store.data.referrals), [store.data.referrals])
   const last = months[months.length - 1]
+  const [target, setTarget] = useState<Target>('3')
+  const feas = useMemo(() => feasibility(a, Number(target)), [a, target])
 
   const copySummary = async () => {
     const ok = await copyText(programSummary(a, actual, window.location.href.split('#')[0]))
@@ -58,6 +62,10 @@ export function EconomicsPage({ store }: { store: Store }) {
               <div className="fields-2">
                 {moneyField('referrerReward', 'Ưu đãi người giới thiệu', 'đ/khách')}
                 {moneyField('newReward', 'Ưu đãi khách mới', 'đ/khách')}
+              </div>
+              <div className={`alert ${feas.ok ? (feas.headroom === 0 ? 'warn' : 'good') : 'bad'}`} role="status">
+                Ưu đãi 2 phía {formatVnd(feas.current)}/khách · tối đa khả thi {formatVnd(feas.max)} (mục tiêu DT/CP ≥ {target} lần)
+                {!feas.ok && ' — đang vượt ngưỡng'}
               </div>
             </section>
             <section className="card">
@@ -125,6 +133,11 @@ export function EconomicsPage({ store }: { store: Store }) {
           ))}
         </div>
       </section>
+
+      <div className="grid-2 insights">
+        <FeasibilityCard a={a} target={target} onTarget={setTarget} />
+        <SensitivityCard a={a} />
+      </div>
 
       <section className="card">
         <h2>Dự phóng {months.length} tháng</h2>
