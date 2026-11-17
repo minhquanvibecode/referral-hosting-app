@@ -61,7 +61,7 @@ Chi tiết trong `docs/PHAN-TICH-DE.md`. Tóm tắt:
 - Nạp dữ liệu mẫu khi đang có dữ liệu → hiện hộp thoại xác nhận trong trang trước khi thay.
 
 ## Kỹ thuật
-Vite + React + TypeScript. Bộ tính toán là hàm thuần trong `src/lib/calc/`, có 24 test Vitest khớp bảng số tính tay. Thư viện Excel (SheetJS) chỉ tải khi cần dùng. Biểu đồ vẽ bằng SVG tự viết.
+Vite + React + TypeScript. Bộ tính toán là hàm thuần trong `src/lib/calc/`, có 25 test Vitest khớp bảng số tính tay. Thư viện Excel (SheetJS) chỉ tải khi cần dùng. Biểu đồ vẽ bằng SVG tự viết.
 ```bash
 npm i
 npm run dev          # chạy thử
@@ -70,5 +70,14 @@ npm run check:ui     # kiểm tra giao diện điện thoại + máy tính (cầ
 npm run deploy:pages # đưa bản build lên nhánh gh-pages
 ```
 
-## Minh chứng
-Ảnh chụp tự động trong thư mục `evidence/`: `390-chrome-*.png` (điện thoại), `1280-desktop-*.png` (máy tính).
+## Dữ liệu mẫu và nhãn mô phỏng
+- Không cần tài khoản. Lần đầu mở app trống → bấm **Nạp dữ liệu mẫu BTC** (8 thành viên KD-001…KD-008, 12 lượt KD-R001…KD-R012, giả định KD_GiaDinh, chép nguyên văn file BTC Bảng B – Kinh tế).
+- Đầu trang mọi tab luôn có nhãn **"Dữ liệu mẫu BTC"** (hoặc "Dữ liệu thật — …") và nhãn **"Mô phỏng"**; form đăng ký dịch vụ ghi rõ "Form giả lập". Dữ liệu chỉ lưu trên trình duyệt (localStorage).
+- Muốn dùng dữ liệu khác: tab **Dữ liệu** → tải file Excel mẫu / tải nguyên file BTC lên / nhập tay.
+
+## Minh chứng (bản chốt 179f0c8, tag `nop-bai`)
+Ảnh chụp tự động **trên link thật** GitHub Pages lúc chốt, sau khi bấm "Nạp dữ liệu mẫu BTC" — thư mục [`evidence/`](evidence/):
+- Điện thoại 360px / 390px (Chrome): `360-chrome-*.png`, `390-chrome-*.png` — mỗi tab: `members`, `signup`, `rules`, `economics`, `data`; `*-0-trong.png` là màn hình trống lần đầu mở.
+- Máy tính 1280px: `1280-desktop-*.png`.
+- Kiểm tra tự động: không cuộn ngang, nút ≥ 44px, chữ ≥ 13px, không lỗi JavaScript, JS tải đầu 87 KB gzip — đạt. 25 test công thức đạt (`npm test`).
+- Nhật ký thời gian làm bài: [`docs/TIMELINE.md`](docs/TIMELINE.md); phân tích đề: [`docs/PHAN-TICH-DE.md`](docs/PHAN-TICH-DE.md).
