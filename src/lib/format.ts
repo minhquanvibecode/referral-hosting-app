@@ -2,7 +2,7 @@
 const vnd = new Intl.NumberFormat('vi-VN', { maximumFractionDigits: 0 })
 
 /** 1115000 → "1.115.000 đ" */
-export const formatVnd = (n: number) => `${vnd.format(Math.round(n))} đ`
+export const formatVnd = (n: number) => `${vnd.format(Math.round(n))}\u00a0đ`
 
 /** 11357.142 → "11.357,14" */
 export const formatNumber = (n: number, digits = 2) =>

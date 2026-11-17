@@ -396,3 +396,21 @@ select { min-height: var(--tap); font: inherit; font-size: 16px; padding: 8px 12
 .svc-row:last-child { border-bottom: 0; }
 .svc-name { display: grid; gap: 2px; font-weight: 600; min-width: 0; }
 .svc-name .hint { font-weight: 400; }
+
+/* Kịch bản: thẻ bấm được; di động chỉ hiện kịch bản đang chọn */
+button.scen { display: grid; gap: 2px; text-align: left; font: inherit; color: var(--text); background: var(--surface); cursor: pointer; width: 100%; }
+.scen-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 4px; font-size: 16px; }
+.scen.active { border: 2px solid var(--accent); background: color-mix(in srgb, var(--accent) 6%, var(--surface)); }
+.card > .segmented { margin-bottom: 12px; }
+@media (max-width: 767px) {
+  .card > .segmented { width: 100%; }
+  .scen:not(.active) { display: none; }
+}
+@media (min-width: 768px) {
+  .scen:not(.active):hover { border-color: var(--accent); }
+}
+
+/* "Cách tính" trong thẻ số: mở ra thì thẻ giãn hết hàng để dễ đọc */
+.kpis > .kpi:has(details.how[open]) { grid-column: 1 / -1; }
+.kpi details.how[open] .how-body { font-size: 15px; }
+.segmented button { white-space: nowrap; padding: 0 8px; }

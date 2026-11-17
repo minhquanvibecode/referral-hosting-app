@@ -1,9 +1,9 @@
 import { useMemo, useState } from 'react'
 import type { Store } from '../App'
-import { Explain, KpiCard, NumberField, ResponsiveTable, SplitLayout, StickyActions, useToast } from '../components/ui'
+import { Explain, KpiCard, NumberField, ResponsiveTable, SegmentedControl, SplitLayout, StickyActions, useToast } from '../components/ui'
 import { sampleAssumptions as D } from '../config/seed'
 import type { Assumptions } from '../config/types'
-import { monthly, project, scenario, SCENARIOS, type MonthRow } from '../lib/calc/economics'
+import { monthly, project, scenario, SCENARIOS, type MonthRow, type ScenarioKey } from '../lib/calc/economics'
 import { programStats } from '../lib/calc/referrals'
 import { formatNumber, formatPercent, formatVnd } from '../lib/format'
 import { programSummary } from '../lib/summary'
@@ -27,6 +27,9 @@ export function EconomicsPage({ store }: { store: Store }) {
   const actual = useMemo(() => programStats(store.data.referrals), [store.data.referrals])
   const last = months[months.length - 1]
   const [target, setTarget] = useState<Target>('3')
+  const [scenKey, setScenKey] = useState<ScenarioKey>('base')
+  const base = scen.find((x) => x.key === 'base')!.p
+  const sel = scen.find((x) => x.key === scenKey)!
   const feas = useMemo(() => feasibility(a, Number(target)), [a, target])
 
   const copySummary = async () => {
@@ -120,18 +123,32 @@ export function EconomicsPage({ store }: { store: Store }) {
 
       <section className="card">
         <h2>Kịch bản</h2>
-        <p className="hint">Thận trọng / Tốt: nhân tỉ lệ tham gia và tỉ lệ chuyển đổi với 0,5 / 1,5 (tối đa 100%). Tỉ lệ DT/CP không đổi giữa kịch bản vì cả doanh thu lẫn ưu đãi đều tính theo từng khách — chương trình chỉ trả khi có khách, nên số khách ít đi không làm lỗ.</p>
+        <SegmentedControl label="Chọn kịch bản" value={scenKey} onChange={setScenKey} options={SCENARIOS.map((x) => ({ value: x.key, label: x.label }))} />
         <div className="scen-grid">
-          {scen.map((s) => (
-            <div key={s.key} className={`scen ${s.key === 'base' ? 'scen-base' : ''}`}>
-              <h3>{s.label}</h3>
-              <div className="row-between"><span>Khách mới</span><b className="num">{s.p.newCustomers}</b></div>
-              <div className="row-between"><span>Doanh thu</span><b className="num">{formatVnd(s.p.revenue)}</b></div>
-              <div className="row-between"><span>Chi phí ưu đãi</span><b className="num">{formatVnd(s.p.totalCost)}</b></div>
-              <div className="row-between"><span>DT / CP</span><b className="num">{ratioText(s.p.ratio)}</b></div>
-            </div>
-          ))}
+          {scen.map((s) => {
+            const d = s.p.newCustomers - base.newCustomers
+            return (
+              <button key={s.key} type="button" className={`scen${s.key === scenKey ? ' active' : ''}`} aria-pressed={s.key === scenKey} onClick={() => setScenKey(s.key)}>
+                <span className="scen-head">
+                  <b>{s.label}</b>
+                  <span className="hint nowrap">× {formatNumber(s.factor, 1)}</span>
+                </span>
+                <span className="row-between"><span>Khách mới</span><b className="num">{s.p.newCustomers} khách{s.key !== 'base' && <span className={d >= 0 ? 'positive' : 'negative'}> ({d >= 0 ? '+' : '−'}{Math.abs(d)})</span>}</b></span>
+                <span className="row-between"><span>Doanh thu</span><b className="num">{formatVnd(s.p.revenue)}</b></span>
+                <span className="row-between"><span>Chi phí ưu đãi</span><b className="num">{formatVnd(s.p.totalCost)}</b></span>
+                <span className="row-between"><span>Doanh thu ròng</span><b className="num positive">{formatVnd(s.p.net)}</b></span>
+                <span className="row-between"><span>DT / CP</span><b className="num">{ratioText(s.p.ratio)}</b></span>
+              </button>
+            )
+          })}
         </div>
+        <Explain title={`Cách tính kịch bản ${sel.label}`} lines={[
+          `Tỉ lệ tham gia = ${formatPercent(a.participation)} × ${formatNumber(sel.factor, 1)} = ${formatPercent(Math.min(1, a.participation * sel.factor))}`,
+          `Tỉ lệ chuyển đổi = ${formatPercent(a.conversion)} × ${formatNumber(sel.factor, 1)} = ${formatPercent(Math.min(1, a.conversion * sel.factor))}`,
+          `Khách mới = ${sel.p.participants} người × ${formatNumber(a.referralsPerMember)} lượt = ${sel.p.potential} tiềm năng × chuyển đổi = ${sel.p.newCustomers} khách (làm tròn xuống)`,
+          `Doanh thu = ${sel.p.newCustomers} × ${formatVnd(a.revenuePerCustomer)} = ${formatVnd(sel.p.revenue)} · Chi phí = ${sel.p.newCustomers} × ${formatVnd(sel.p.rewardPerCustomer)} = ${formatVnd(sel.p.totalCost)}`,
+          'DT/CP giống nhau ở mọi kịch bản vì doanh thu và ưu đãi đều tính theo từng khách — ít khách thì chi ít, không làm lỗ.',
+        ]} />
       </section>
 
       <div className="grid-2 insights">
