@@ -9,3 +9,4 @@
   Duyệt ảnh: 390 economics & 1280 members/economics đạt danh sách mục 6 (KPI to, có đơn vị, desktop 2 cột, thẻ trên di động); đã sửa tràn ngang thẻ & bẻ dòng bảng
   Luồng demo thử thật: link REF-TC03 → đăng ký → KD-R013 chờ thanh toán → mô phỏng thanh toán → Đã chuyển đổi, +30.000 đ hai phía
 14:17 — B6 — chốt bản, tag nop-bai
+14:21 — B6 — bỏ cPanel theo quyết định chủ dự án, chỉ dùng link Pages

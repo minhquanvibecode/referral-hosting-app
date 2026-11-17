@@ -2,8 +2,7 @@
 
 App tĩnh một trang mô phỏng chương trình giới thiệu khách cho doanh nghiệp hosting/domain, kèm phân tích kinh tế. Chạy trên điện thoại và máy tính, không cần đăng nhập. Dữ liệu lưu trên trình duyệt (localStorage).
 
-- **Link chính (cPanel):** `https://gioithieu.<tên-miền>` *(điền sau khi upload)*
-- **Link dự phòng (GitHub Pages):** https://minhquanvibecode.github.io/referral-hosting-app/
+- **Link demo (GitHub Pages):** https://minhquanvibecode.github.io/referral-hosting-app/
 - **Mã nguồn:** https://github.com/minhquanvibecode/referral-hosting-app
 - Chân trang mỗi tab hiện `Phiên bản <commit> · build <giờ>`, bấm vào sẽ mở đúng commit. Bản nộp gắn tag `nop-bai`.
 
@@ -66,7 +65,6 @@ npm run dev          # chạy thử
 npm test             # kiểm tra công thức
 npm run check:ui     # kiểm tra giao diện điện thoại + máy tính (cần: npm run build && npx vite preview --port 4173)
 npm run deploy:pages # đưa bản build lên nhánh gh-pages
-npm run pack         # tạo dist.zip để upload cPanel
 ```
 
 ## Minh chứng
