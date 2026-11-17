@@ -80,7 +80,8 @@ function Inner() {
       <>
         <span className={`badge ${s.kind === 'sample' ? 'src-sample' : 'src-real'}`}>{text}</span>
         {s.edited && <span className="badge changed">đã chỉnh</span>}
-        <span className="desktop-only">· Mô phỏng, lưu trên máy này</span>
+        <span className="badge sim">Mô phỏng</span>
+        <span className="desktop-only">· Dữ liệu lưu trên máy này</span>
       </>
     )
   }, [data])

@@ -15,3 +15,4 @@
 14:35 — thêm logo RAUMA (đầu trang + favicon + icon iPhone), đầu trang di động gọn 1 dòng
 14:38 — sửa 3 lỗi: link chia sẻ kèm ?v=<commit>, SĐT 10 số bắt đầu bằng 0, giá ghi /tháng /năm + cột 'Giá đơn đầu tiên'
 14:40 — đổi nút 'Xác nhận TT' → 'Xác nhận thanh toán'
+14:44 — nhãn 'Mô phỏng' hiện trên mọi thiết bị (quy định: số liệu giả lập phải nhận biết rõ)
