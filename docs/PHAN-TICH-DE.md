@@ -20,8 +20,32 @@
 - [ ] R8 Nút **Nạp dữ liệu mẫu** (BTC): thành viên + lượt giới thiệu ở các trạng thái khác nhau.
 - [ ] R9 Toàn bộ mô phỏng, dữ liệu lưu local.
 
-## 3. Dữ liệu mẫu BTC
-⚠️ **Chưa có file BTC trong tay.** Khi người dùng gửi file (Excel/CSV), chép nguyên văn vào `src/config/seed.ts` và điều chỉnh tên cột ở mục 3b cho khớp file. Trong lúc chờ, dựng bằng bộ dữ liệu tạm cùng cấu trúc (đánh dấu rõ "dữ liệu tạm, sẽ thay bằng BTC").
+## 3. Dữ liệu mẫu BTC (đã nhận lúc 13:56 — CẬP NHẬT, thay các giả định tạm bên dưới)
+File "Bộ dữ liệu mẫu Vibe Coding – Bảng B Kinh tế": KD_ThanhVien (8 thành viên KD-001…KD-008), KD_GioiThieu (12 lượt KD-R001…R012),
+KD_QuyDinh, KD_GiaDinh, KD_DuPhong. Chép nguyên văn vào `src/config/seed.ts`. Tiêu đề cột Excel của app = tiêu đề BTC → tải nguyên file BTC lên được.
+
+**Quyết định sau khi có dữ liệu BTC (thay mục 4, 4b, 5 cũ):**
+- Ưu đãi: người giới thiệu 30.000 đ, khách mới 30.000 đ / lượt chuyển đổi (theo KD_QuyDinh). Tầng 2: 10.000 đ (đội), tỉ lệ khách có tầng 2 mặc định 0% để khớp ví dụ BTC.
+- Doanh thu = doanh thu **tháng đầu** (đ/tháng). Giá dịch vụ lấy theo KD_GioiThieu: Hosting Mini 99.000 · Cơ bản 149.000 · Pro 279.000 · Domain .vn 59.000 · Domain .com 420.000 — đối chiếu giá thị trường trong tab Thể lệ.
+- 7 trạng thái BTC, chia 3 nhóm: Đã chuyển đổi (cộng ưu đãi) · Chờ (Đang chờ thanh toán / Đang xử lý / Đang rà soát) · Loại (Đã hủy / Không hợp lệ / Từ chối - trùng).
+- Tự giới thiệu: định danh khách (SĐT) trùng SĐT chủ mã → "Không hợp lệ" (khớp KD-R007). Trùng: định danh đã có lượt còn hiệu lực → "Từ chối - trùng" (khớp KD-R010).
+- Công thức dự phóng theo KD_DuPhong: tham gia = TV × tỉ lệ; tiềm năng = tham gia × lượt/người; khách mới = tiềm năng × chuyển đổi (mỗi bước làm tròn xuống); DT = khách × 180.000; CP = khách × 60.000; tỉ lệ 3,00x; so với quảng cáo 90.000 đ/khách → tiết kiệm 30.000 đ/khách.
+- Hạng thẻ (đội): Thành viên (0) · Bạc (≥ 2 chuyển đổi) · Vàng (≥ 5).
+
+**Bảng số tính tay (đáp án test, `src/lib/calc/calc.test.ts`):**
+| Chỉ số | Kết quả |
+|---|---|
+| Thành viên tham gia | 1.200 × 15% = 180 |
+| Khách tiềm năng | 180 × 2 = 360 |
+| Khách mới | 360 × 25% = 90 |
+| Doanh thu tháng đầu | 90 × 180.000 = 16.200.000 đ |
+| Tổng chi phí ưu đãi | 90 × 60.000 = 5.400.000 đ |
+| DT / CP | 3,00 lần |
+| Tiết kiệm so với quảng cáo | 90.000 − 60.000 = 30.000 đ/khách · 2.700.000 đ |
+| Tầng 2 bật 20% | 62.000 đ/khách · 5.580.000 đ |
+| Tháng 2 (giữ chân 90%) | 90 × 0,9 + 90 = 171 khách → 30.780.000 đ |
+| Thực tế BTC | 12 lượt: 6 chuyển đổi · 3 chờ · 3 loại; DT 1.325.000 đ; ưu đãi 360.000 đ (180.000 + 180.000) |
+| KD-001 Mai An | 3 lượt, 2 chuyển đổi, 60.000 đ, hạng Bạc |
 
 ## 3b. Cấu trúc dữ liệu (= các sheet Excel)
 | Sheet | Cột (tiêu đề kèm đơn vị) | Kiểu | Bắt buộc | Giới hạn | Số dòng tối thiểu |

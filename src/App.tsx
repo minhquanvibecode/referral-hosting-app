@@ -13,7 +13,7 @@ import { DataPage } from './pages/DataPage'
 
 const TABS = [
   { id: 'members', label: 'Thành viên', icon: <span aria-hidden>👥</span> },
-  { id: 'signup', label: 'Đăng ký DV', icon: <span aria-hidden>📝</span> },
+  { id: 'signup', label: 'Đăng ký', icon: <span aria-hidden>📝</span> },
   { id: 'rules', label: 'Thể lệ', icon: <span aria-hidden>📜</span> },
   { id: 'economics', label: 'Kinh tế', icon: <span aria-hidden>📈</span> },
   { id: 'data', label: 'Dữ liệu', icon: <span aria-hidden>💾</span> },

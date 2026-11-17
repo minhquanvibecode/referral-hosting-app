@@ -88,7 +88,7 @@ export function DataPage({ data, setData, onLoadSample }: { data: AppData | null
             </div>
           )}
           <h3>Cách 2 — Nhập trực tiếp trên app</h3>
-          <p className="hint">Bắt đầu với danh sách trống + giả định BTC, rồi: đăng ký thành viên ở tab <b>Thành viên</b>, ghi lượt ở tab <b>Đăng ký DV</b>, sửa giả định ở tab <b>Kinh tế</b>.</p>
+          <p className="hint">Bắt đầu với danh sách trống + giả định BTC, rồi: đăng ký thành viên ở tab <b>Thành viên</b>, ghi lượt ở tab <b>Đăng ký</b>, sửa giả định ở tab <b>Kinh tế</b>.</p>
           <button type="button" className="btn btn-block" onClick={() => ask('manual')}>Bắt đầu nhập tay</button>
         </section>
       </div>

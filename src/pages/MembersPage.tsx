@@ -42,6 +42,14 @@ export function MembersPage({ store, selectedId, onSelect, onOpenSignup }: { sto
   return (
     <div className="members-layout">
       <section className="ml-track">
+        {members.length > 1 && (
+          <div className="field mobile-only">
+            <label htmlFor="member-pick">Đang xem thành viên</label>
+            <select id="member-pick" value={member?.id} onChange={(e) => onSelect(e.target.value)}>
+              {members.map((m) => <option key={m.id} value={m.id}>{m.name} · {m.code}</option>)}
+            </select>
+          </div>
+        )}
         {member && stats ? (
           <>
             <div className="card member-card">
