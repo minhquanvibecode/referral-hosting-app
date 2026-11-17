@@ -3,7 +3,7 @@ import type { Store } from '../App'
 import { KpiCard, SplitLayout, StickyActions, useToast } from '../components/ui'
 import { services, STATUS } from '../config/seed'
 import type { Referral } from '../config/types'
-import { checkSignup, confirmPayment, createReferral, findByCode } from '../lib/calc/referrals'
+import { checkSignup, confirmPayment, createReferral, findByCode, isValidPhone, PHONE_ERROR } from '../lib/calc/referrals'
 import { formatVnd } from '../lib/format'
 import { StatusBadge, todayVN } from '../lib/view'
 
@@ -22,6 +22,7 @@ export function SignupPage({ store, initialCode, onViewMember }: { store: Store;
   const discount = Math.min(a.newReward, price)
   const check = useMemo(() => checkSignup(members, referrals, code, phone, name), [members, referrals, code, phone, name])
   const last = referrals.find((r) => r.id === lastId) ?? null
+  const phoneBad = phone.trim() !== '' && (touched || phone.replace(/\D/g, '').length >= 10) && !isValidPhone(phone)
 
   const submit = () => {
     setTouched(true)
@@ -60,17 +61,17 @@ export function SignupPage({ store, initialCode, onViewMember }: { store: Store;
             <input id="s-name" value={name} onChange={(e) => setName(e.target.value)} autoComplete="off" />
             {touched && !name.trim() && <div className="error">Nhập họ tên khách</div>}
           </div>
-          <div className={`field${touched && !phone.trim() ? ' invalid' : ''}`}>
+          <div className={`field${(touched && !phone.trim()) || phoneBad ? ' invalid' : ''}`}>
             <label htmlFor="s-phone">Số điện thoại / mã định danh khách</label>
             <input id="s-phone" inputMode="tel" value={phone} onChange={(e) => setPhone(e.target.value)} autoComplete="off" placeholder="VD: 0912345678" />
-            {touched && !phone.trim() ? <div className="error">Nhập số điện thoại</div> : <div className="hint">Dùng để phát hiện tự giới thiệu và khách trùng.</div>}
+            {touched && !phone.trim() ? <div className="error">Nhập số điện thoại</div> : phoneBad ? <div className="error">{PHONE_ERROR}</div> : <div className="hint">Dùng để phát hiện tự giới thiệu và khách trùng.</div>}
           </div>
           <fieldset className="choice-list">
             <legend>Dịch vụ</legend>
             {services.map((s) => (
               <button key={s.name} type="button" className="choice" aria-pressed={s.name === service} onClick={() => setService(s.name)}>
                 <span>{s.name}</span>
-                <span className="num">{formatVnd(s.price)}</span>
+                <span className="num">{formatVnd(s.price)}/{s.unit}</span>
               </button>
             ))}
           </fieldset>
@@ -83,7 +84,7 @@ export function SignupPage({ store, initialCode, onViewMember }: { store: Store;
       aside={
         <>
           <div className="kpis">
-            <KpiCard label="Giá tháng đầu" value={formatVnd(price)} hint={service} />
+            <KpiCard label="Giá đơn đầu tiên" value={formatVnd(price)} hint={`${service} · /${services.find((s) => s.name === service)!.unit}`} />
             <KpiCard
               label="Khách phải trả"
               value={formatVnd(price - (owner ? discount : 0))}

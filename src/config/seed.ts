@@ -56,12 +56,12 @@ export const sampleAssumptions: Assumptions = {
 }
 
 /** Bảng giá dịch vụ (doanh thu tháng đầu, lấy theo KD_GioiThieu BTC) — dùng cho form đăng ký giả lập. */
-export const services: { name: string; price: number; market: string }[] = [
-  { name: 'Hosting Mini', price: 99000, market: 'Thị trường VN: 50.000–120.000 đ/tháng' },
-  { name: 'Hosting Cơ bản', price: 149000, market: 'Thị trường VN: 100.000–200.000 đ/tháng' },
-  { name: 'Hosting Pro', price: 279000, market: 'Thị trường VN: 200.000–400.000 đ/tháng' },
-  { name: 'Domain .vn', price: 59000, market: 'Giá khuyến mãi năm đầu; giá thường 450.000–800.000 đ/năm' },
-  { name: 'Domain .com', price: 420000, market: 'Thị trường VN: 300.000–450.000 đ/năm' },
+export const services: { name: string; price: number; unit: 'tháng' | 'năm'; market: string }[] = [
+  { name: 'Hosting Mini', price: 99000, unit: 'tháng', market: 'Thị trường VN: 50.000–120.000 đ/tháng' },
+  { name: 'Hosting Cơ bản', price: 149000, unit: 'tháng', market: 'Thị trường VN: 100.000–200.000 đ/tháng' },
+  { name: 'Hosting Pro', price: 279000, unit: 'tháng', market: 'Thị trường VN: 200.000–400.000 đ/tháng' },
+  { name: 'Domain .vn', price: 59000, unit: 'năm', market: 'Giá khuyến mãi năm đầu; giá thường 450.000–800.000 đ/năm' },
+  { name: 'Domain .com', price: 420000, unit: 'năm', market: 'Thị trường VN: 300.000–450.000 đ/năm' },
 ]
 
 /** Nhóm trạng thái theo KD_QuyDinh. */

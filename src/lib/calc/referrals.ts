@@ -9,6 +9,12 @@ export const normId = (s: string) => {
 }
 export const normCode = (s: string) => s.trim().toUpperCase()
 
+export const PHONE_ERROR = 'Số điện thoại chưa đúng (10 số, bắt đầu bằng 0)'
+/** Chuẩn hoá SĐT: bỏ dấu cách/chấm/gạch, +84 → 0. */
+export const normPhone = (s: string) => normId(s)
+/** Hợp lệ khi đúng 10 chữ số, bắt đầu bằng 0. */
+export const isValidPhone = (s: string) => /^0\d{9}$/.test(normPhone(s))
+
 export const findByCode = (members: Member[], code: string) => members.find((m) => normCode(m.code) === normCode(code))
 
 export type StatusGroup = 'converted' | 'pending' | 'rejected'
@@ -33,7 +39,8 @@ export function checkSignup(members: Member[], referrals: Referral[], code: stri
   if (!owner) return { ok: false, error: 'Mã giới thiệu không tồn tại' }
   if (!customerName.trim()) return { ok: false, error: 'Nhập họ tên khách' }
   if (!customerId.trim()) return { ok: false, error: 'Nhập số điện thoại' }
-  const id = normId(customerId)
+  if (!isValidPhone(customerId)) return { ok: false, error: PHONE_ERROR }
+  const id = normPhone(customerId)
   if (normId(owner.phone) === id) return { ok: true, status: STATUS.invalid, note: 'Tự giới thiệu chính mình' }
   const prev = referrals.find((r) => normId(r.customerId) === id && !REJECTED_STATUSES.includes(r.status))
   if (prev) return { ok: true, status: STATUS.duplicate, note: `Trùng khách đã ghi nhận ở ${prev.id}`, duplicateOf: prev.id }
@@ -56,7 +63,7 @@ export function createReferral(
   return {
     referral: {
       id: nextReferralId(referrals), memberId: owner.id, code: owner.code, customerName: input.customerName.trim(),
-      customerId: input.customerId.trim(), service: input.service, date: input.date, status: c.status,
+      customerId: normPhone(input.customerId), service: input.service, date: input.date, status: c.status,
       revenue: input.revenue, referrerReward: 0, newReward: 0, totalReward: 0, note: c.note,
     },
   }
@@ -134,8 +141,8 @@ export function programStats(referrals: Referral[]): ProgramStats {
 export function createMember(members: Member[], input: { name: string; phone: string; referredBy: string; joinedAt: string }): { error: string } | { member: Member } {
   const name = input.name.trim().replace(/\s+/g, ' ')
   if (!name) return { error: 'Nhập họ tên' }
-  const phone = normId(input.phone)
-  if (!/^0\d{9}$/.test(phone)) return { error: 'Số điện thoại gồm 10 chữ số, bắt đầu bằng 0' }
+  const phone = normPhone(input.phone)
+  if (!isValidPhone(phone)) return { error: PHONE_ERROR }
   if (members.some((m) => normId(m.phone) === phone)) return { error: 'Số điện thoại này đã là thành viên' }
   if (input.referredBy.trim() && !findByCode(members, input.referredBy)) return { error: 'Mã người giới thiệu không tồn tại' }
   const max = members.reduce((mx, m) => Math.max(mx, Number(m.id.match(/(\d+)$/)?.[1] ?? 0)), 0)

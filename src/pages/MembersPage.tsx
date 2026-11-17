@@ -3,11 +3,11 @@ import type { Store } from '../App'
 import { ConfirmDialog, KpiCard, ResponsiveTable, StickyActions, useToast } from '../components/ui'
 import type { Referral } from '../config/types'
 import { PENDING_STATUSES } from '../config/seed'
-import { cancelReferral, confirmPayment, createMember, memberStats } from '../lib/calc/referrals'
+import { cancelReferral, confirmPayment, createMember, isValidPhone, memberStats, PHONE_ERROR } from '../lib/calc/referrals'
 import { formatVnd } from '../lib/format'
 import { copyText, fmtDate, referralLink, StatusBadge, todayVN } from '../lib/view'
 
-export function MembersPage({ store, selectedId, onSelect, onOpenSignup }: { store: Store; selectedId: string | null; onSelect: (id: string) => void; onOpenSignup: (code: string) => void }) {
+export function MembersPage({ store, selectedId, onSelect }: { store: Store; selectedId: string | null; onSelect: (id: string) => void }) {
   const toast = useToast()
   const { members, referrals, assumptions: a } = store.data
   const [q, setQ] = useState('')
@@ -65,7 +65,7 @@ export function MembersPage({ store, selectedId, onSelect, onOpenSignup }: { sto
               <div className="mc-link">{referralLink(member.code)}</div>
               <div className="btn-row">
                 <button type="button" className="btn btn-primary" onClick={() => copyLink(member.code)}>Sao chép link</button>
-                <button type="button" className="btn" onClick={() => onOpenSignup(member.code)}>Mở form bằng link</button>
+                <button type="button" className="btn" onClick={() => { window.location.href = referralLink(member.code) }}>Mở form bằng link</button>
               </div>
             </div>
             <div className="kpis">
@@ -154,13 +154,14 @@ export function MembersPage({ store, selectedId, onSelect, onOpenSignup }: { sto
         </div>
         <div className="field">
           <label htmlFor="m-phone">Số điện thoại (dùng để chống tự giới thiệu)</label>
-          <input id="m-phone" inputMode="tel" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} autoComplete="off" />
+          <input id="m-phone" inputMode="tel" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} autoComplete="off" placeholder="VD: 0912345678" aria-invalid={formError === PHONE_ERROR || (form.phone.replace(/\D/g, '').length >= 10 && !isValidPhone(form.phone))} />
+          {(formError === PHONE_ERROR || (form.phone.replace(/\D/g, '').length >= 10 && !isValidPhone(form.phone))) && <div className="error">{PHONE_ERROR}</div>}
         </div>
         <div className="field">
           <label htmlFor="m-ref">Mã người giới thiệu bạn (không bắt buộc — tầng 2)</label>
           <input id="m-ref" value={form.referredBy} onChange={(e) => setForm({ ...form, referredBy: e.target.value.toUpperCase() })} autoComplete="off" placeholder="VD: REF-MA01" />
         </div>
-        {formError && <div className="error" role="alert">{formError}</div>}
+        {formError && formError !== PHONE_ERROR && <div className="error" role="alert">{formError}</div>}
       </ConfirmDialog>
     </div>
   )

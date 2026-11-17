@@ -3,7 +3,7 @@ import { sampleAssumptions, sampleMembers, sampleReferrals, STATUS } from '../..
 import { dataSchema, fromDataset, toDataset } from '../../config/dataSchema'
 import { validateRows, buildWorkbook, parseWorkbook } from '../excel'
 import { monthly, project, scenario } from './economics'
-import { cancelReferral, checkSignup, confirmPayment, createMember, createReferral, memberStats, programStats } from './referrals'
+import { cancelReferral, checkSignup, confirmPayment, createMember, createReferral, memberStats, PHONE_ERROR, programStats } from './referrals'
 
 const A = sampleAssumptions
 
@@ -71,8 +71,16 @@ describe('Đăng ký qua mã giới thiệu', () => {
     expect(c).toMatchObject({ ok: true, status: STATUS.invalid })
   })
   it('trùng khách → Từ chối - trùng', () => {
-    const c = checkSignup(sampleMembers, sampleReferrals, 'REF-QB02', 'KH-DEMO-003', 'Khách mẫu 03')
-    expect(c).toMatchObject({ ok: true, status: STATUS.duplicate, duplicateOf: 'KD-R003' })
+    const r = createReferral(sampleMembers, sampleReferrals, { code: 'REF-QB02', customerName: 'Lan', customerId: '+84 912.345-678', service: 'Hosting Pro', revenue: 279000, date: '2026-11-17' })
+    if (!('referral' in r)) throw new Error('fail')
+    expect(r.referral.customerId).toBe('0912345678') // lưu dạng đã chuẩn hoá
+    const c = checkSignup(sampleMembers, [...sampleReferrals, r.referral], 'REF-MA01', '0912 345 678', 'Lan')
+    expect(c).toMatchObject({ ok: true, status: STATUS.duplicate, duplicateOf: 'KD-R013' })
+  })
+  it('SĐT sai định dạng bị chặn ở cả 2 form', () => {
+    expect(checkSignup(sampleMembers, sampleReferrals, 'REF-MA01', '12', 'A')).toEqual({ ok: false, error: PHONE_ERROR })
+    expect(checkSignup(sampleMembers, sampleReferrals, 'REF-MA01', '1912345678', 'A')).toEqual({ ok: false, error: PHONE_ERROR })
+    expect(createMember(sampleMembers, { name: 'B', phone: '091234567', referredBy: '', joinedAt: '' })).toEqual({ error: PHONE_ERROR })
   })
   it('khách mới hợp lệ → chờ thanh toán, xác nhận → cộng 30.000 đ mỗi phía', () => {
     const r = createReferral(sampleMembers, sampleReferrals, { code: 'REF-TC03', customerName: 'Lan', customerId: '0912345678', service: 'Hosting Cơ bản', revenue: 149000, date: '2026-11-17' })

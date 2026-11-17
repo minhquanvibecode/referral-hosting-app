@@ -113,7 +113,7 @@ function Inner() {
       ) : !store ? (
         empty
       ) : tab === 'members' ? (
-        <MembersPage store={store} selectedId={selectedId ?? store.data.members[0]?.id ?? null} onSelect={setSelectedId} onOpenSignup={(c) => go('signup', c)} />
+        <MembersPage store={store} selectedId={selectedId ?? store.data.members[0]?.id ?? null} onSelect={setSelectedId} />
       ) : tab === 'signup' ? (
         <SignupPage store={store} initialCode={code} onViewMember={(id) => { setSelectedId(id); go('members') }} />
       ) : (

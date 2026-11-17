@@ -58,7 +58,7 @@ export function RulesPage({ assumptions: a }: { assumptions: Assumptions }) {
             rowKey={(s) => s.name}
             columns={[
               { key: 'name', header: 'Dịch vụ', primary: true, render: (s) => <span className="nowrap">{s.name}</span> },
-              { key: 'price', header: 'Giá tháng đầu', align: 'right', render: (s) => formatVnd(s.price) },
+              { key: 'price', header: 'Giá đơn đầu tiên', align: 'right', render: (s) => `${formatVnd(s.price)}/${s.unit}` },
               { key: 'share', header: 'Ưu đãi / giá', align: 'right', render: (s) => formatPercent(both / s.price) },
             ]}
           />

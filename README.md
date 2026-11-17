@@ -10,7 +10,7 @@ App tĩnh một trang mô phỏng chương trình giới thiệu khách cho doan
 1. Mở link → bấm **Nạp dữ liệu mẫu BTC** (8 thành viên, 12 lượt giới thiệu ở đủ trạng thái).
 2. Tab **Thành viên**: chọn *Mai An*. Thẻ thành viên có mã `REF-MA01`, nút **Sao chép link**, 3 khách đã giới thiệu, 2 khách đã chuyển đổi, tổng ưu đãi 60.000 đ, hạng Bạc.
 3. Bấm **Mở form bằng link** → tab **Đăng ký** điền sẵn mã. Nhập tên và SĐT mới → **Đăng ký dịch vụ** → lượt ở trạng thái "Đang chờ thanh toán" → **Mô phỏng thanh toán** → "Đã chuyển đổi", hai phía được cộng 30.000 đ.
-4. Thử gian lận: mã `REF-LM06` + SĐT `0900002006` → "Không hợp lệ – Tự giới thiệu"; mã `REF-QB02` + định danh `KH-DEMO-003` → "Từ chối - trùng".
+4. Thử gian lận: mã `REF-LM06` + SĐT `0900002006` → "Không hợp lệ – Tự giới thiệu"; đăng ký lại cùng một SĐT khách lần hai → "Từ chối - trùng". SĐT phải đủ 10 số, bắt đầu bằng 0 (tự bỏ dấu cách/chấm/gạch, +84 → 0).
 5. Tab **Kinh tế**: sửa giả định và xem kết quả đổi ngay; mỗi con số có khối **Cách tính**. Có 3 kịch bản, biểu đồ 12 tháng và nút **Sao chép tóm tắt chương trình**.
 
 ## Đáp ứng đề

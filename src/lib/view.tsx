@@ -12,7 +12,10 @@ export const fmtDate = (s: string) => {
 /** Ngày hôm nay theo giờ Việt Nam, dạng yyyy-mm-dd */
 export const todayVN = () => new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' }).format(new Date())
 
-export const referralLink = (code: string) => `${window.location.origin}${window.location.pathname}#signup?ma=${encodeURIComponent(code)}`
+declare const __APP_COMMIT__: string
+/** Mã commit của bản đang chạy (bỏ đuôi +sua) — gắn vào link để không mở nhầm bản cũ trong bộ nhớ đệm. */
+const APP_VERSION = __APP_COMMIT__.replace('+sua', '')
+export const referralLink = (code: string) => `${window.location.origin}${window.location.pathname}?v=${APP_VERSION}#signup?ma=${encodeURIComponent(code)}`
 
 export async function copyText(text: string): Promise<boolean> {
   try {
