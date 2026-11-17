@@ -14,3 +14,4 @@
 14:32 — sửa theo phản hồi: chọn kịch bản (nút + thẻ bấm được), Cách tính giãn hết hàng khi mở, 'đ' không tách dòng
 14:35 — thêm logo RAUMA (đầu trang + favicon + icon iPhone), đầu trang di động gọn 1 dòng
 14:38 — sửa 3 lỗi: link chia sẻ kèm ?v=<commit>, SĐT 10 số bắt đầu bằng 0, giá ghi /tháng /năm + cột 'Giá đơn đầu tiên'
+14:40 — đổi nút 'Xác nhận TT' → 'Xác nhận thanh toán'

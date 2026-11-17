@@ -101,13 +101,13 @@ export function MembersPage({ store, selectedId, onSelect }: { store: Store; sel
                 actions={(r) =>
                   PENDING_STATUSES.includes(r.status) ? (
                     <span className="act">
-                      <button type="button" className="btn btn-sm btn-primary" onClick={() => setRef(r, confirmPayment(r, a), `${r.id}: thanh toán thành công, cộng ${formatVnd(a.referrerReward)} cho ${member.name}`)}>Xác nhận TT</button>
+                      <button type="button" className="btn btn-sm btn-primary" onClick={() => setRef(r, confirmPayment(r, a), `${r.id}: thanh toán thành công, cộng ${formatVnd(a.referrerReward)} cho ${member.name}`)}>Xác nhận thanh toán</button>
                       <button type="button" className="btn btn-sm" onClick={() => setRef(r, cancelReferral(r), `${r.id}: đã hủy`)}>Hủy</button>
                     </span>
                   ) : null
                 }
               />
-              <p className="hint">"Xác nhận TT" mô phỏng khách thanh toán thành công → chuyển "Đã chuyển đổi" và cộng ưu đãi cho cả hai phía.</p>
+              <p className="hint">"Xác nhận thanh toán" mô phỏng khách thanh toán thành công → chuyển "Đã chuyển đổi" và cộng ưu đãi cho cả hai phía.</p>
             </div>
           </>
         ) : (
