@@ -331,3 +331,7 @@ h3 { font-size: 15px; margin: 12px 0 6px; }
   .kpis.kpis-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   h2 { font-size: 18px; }
 }
+/* Thẻ danh sách: chữ dài (ghi chú, đối chiếu thị trường) được xuống dòng, không đẩy tràn ngang */
+.rt-card dl > div > dt { flex: none; }
+.rt-card dl > div > dd { min-width: 0; text-align: right; }
+.rt-card dd .hint, .rt-card dd .wrap { white-space: normal; display: inline-block; }
