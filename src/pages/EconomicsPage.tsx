@@ -11,7 +11,7 @@ import { copyText, fromPct, toPct } from '../lib/view'
 import { MonthlyChart } from './MonthlyChart'
 
 const money = (v: number) => formatNumber(v, 0)
-const ratioText = (r: number | null) => (r === null ? 'Không tính được' : `${formatNumber(r)} lần`)
+const ratioText = (r: number | null) => (r === null ? 'Không tính được' : `${r.toFixed(2).replace('.', ',')} lần`)
 
 export function EconomicsPage({ store }: { store: Store }) {
   const toast = useToast()
@@ -112,7 +112,7 @@ export function EconomicsPage({ store }: { store: Store }) {
 
       <section className="card">
         <h2>Kịch bản</h2>
-        <p className="hint">Thận trọng / Tốt: nhân tỉ lệ tham gia và tỉ lệ chuyển đổi với 0,5 / 1,5 (tối đa 100%).</p>
+        <p className="hint">Thận trọng / Tốt: nhân tỉ lệ tham gia và tỉ lệ chuyển đổi với 0,5 / 1,5 (tối đa 100%). Tỉ lệ DT/CP không đổi giữa kịch bản vì cả doanh thu lẫn ưu đãi đều tính theo từng khách — chương trình chỉ trả khi có khách, nên số khách ít đi không làm lỗ.</p>
         <div className="scen-grid">
           {scen.map((s) => (
             <div key={s.key} className={`scen ${s.key === 'base' ? 'scen-base' : ''}`}>

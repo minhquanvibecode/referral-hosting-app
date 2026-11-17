@@ -21,7 +21,7 @@ export function programSummary(a: Assumptions, actual: ProgramStats | null, link
     `• × ${formatNumber(a.referralsPerMember)} lượt/người = ${p.potential} khách tiềm năng × ${formatPercent(a.conversion)} chuyển đổi = ${p.newCustomers} khách mới`,
     `• Doanh thu tháng đầu: ${formatVnd(p.revenue)} (${formatVnd(a.revenuePerCustomer)}/khách)`,
     `• Chi phí ưu đãi: ${formatVnd(p.totalCost)} (${formatVnd(p.rewardPerCustomer)}/khách)`,
-    `• Doanh thu / chi phí ưu đãi: ${p.ratio === null ? 'không tính được (chi phí = 0)' : formatNumber(p.ratio) + ' lần'}`,
+    `• Doanh thu / chi phí ưu đãi: ${p.ratio === null ? 'không tính được (chi phí = 0)' : p.ratio.toFixed(2).replace('.', ',') + ' lần'}`,
     `• So với quảng cáo ${formatVnd(a.adCostPerCustomer)}/khách: tiết kiệm ${formatVnd(p.savingPerCustomer)}/khách, tổng ${formatVnd(p.totalSaving)}`,
   ]
   if (actual) {
