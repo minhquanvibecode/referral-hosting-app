@@ -11,7 +11,8 @@
     "test": "vitest run",
     "typecheck": "tsc -b",
     "check:ui": "node scripts/check-ui.mjs",
-    "pack": "npm run build && cd dist && rm -f ../dist.zip && zip -qr ../dist.zip ."
+    "pack": "npm run build && cd dist && rm -f ../dist.zip && zip -qr ../dist.zip .",
+    "deploy:pages": "npm run build && cd dist && touch .nojekyll && rm -rf .git && git init -q -b gh-pages && git add -A && git commit -qm deploy && git push -qf $(cd .. && git config --get remote.origin.url) gh-pages && rm -rf .git"
   },
   "dependencies": {
     "react": "^19.3.1",
