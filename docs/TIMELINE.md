@@ -10,3 +10,4 @@
   Luồng demo thử thật: link REF-TC03 → đăng ký → KD-R013 chờ thanh toán → mô phỏng thanh toán → Đã chuyển đổi, +30.000 đ hai phía
 14:17 — B6 — chốt bản, tag nop-bai
 14:21 — B6 — bỏ cPanel theo quyết định chủ dự án, chỉ dùng link Pages
+14:29 — B4 bổ sung — ngưỡng ưu đãi khả thi + độ nhạy ±10% (24 test, check:ui 0 lỗi, duyệt 390 & 1280)

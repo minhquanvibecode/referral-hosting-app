@@ -22,6 +22,7 @@ App tĩnh một trang mô phỏng chương trình giới thiệu khách cho doan
 | Thể lệ | Tab Thể lệ: ưu đãi 2 phía, tầng 2, hạng thẻ, điều kiện nhận, chống gian lận, bảng giá giả định |
 | Bảng Kinh tế | Tab Kinh tế: giả định → khách mới, doanh thu, chi phí ưu đãi, tỉ lệ doanh thu/chi phí; công thức hiển thị cạnh từng số |
 | Nạp dữ liệu mẫu | Nút "Nạp dữ liệu mẫu BTC" (màn hình trống và tab Dữ liệu) |
+| Phân tích thêm | **Ưu đãi tối đa còn khả thi**: tính ngược từ mục tiêu DT/CP (2/3/4 lần) và chi phí quảng cáo, có cảnh báo khi vượt ngưỡng và đánh giá từng dịch vụ · **Độ nhạy ±10%**: xếp hạng giả định ảnh hưởng mạnh nhất tới doanh thu ròng |
 | Mở rộng | Ưu đãi 2 tầng · Biểu đồ dự phóng theo tháng · Sao chép tóm tắt · Kịch bản Thận trọng/Cơ sở/Tốt · Nạp/xuất Excel (đọc được nguyên file BTC) |
 
 ## Thể lệ và giá giả định
@@ -46,6 +47,8 @@ Doanh thu tháng đầu = Khách mới × Doanh thu TB/khách          = 90 × 1
 Tổng chi phí ưu đãi = Khách mới × Ưu đãi/khách                = 5.400.000 đ
 Doanh thu / chi phí = 16.200.000 ÷ 5.400.000                  = 3,00 lần
 Tiết kiệm so với quảng cáo = 90.000 − 60.000 = 30.000 đ/khách
+Ưu đãi tối đa/khách = min(DT TB ÷ Mục tiêu DT/CP; Chi phí quảng cáo/khách) = min(180.000 ÷ 3; 90.000) = 60.000 đ
+Độ nhạy: đổi từng giả định ±10% → Δ doanh thu ròng; DT TB/khách mạnh nhất (±1.620.000 đ)
 Theo tháng: Khách_t = Khách_(t−1) × Tỉ lệ giữ chân (90%, giả định đội) + Khách mới; Doanh thu_t = Khách_t × 180.000 đ
 ```
 **Làm tròn:** số người và số khách được làm tròn xuống ở từng bước (dự phóng thận trọng). Tiền là số nguyên đồng. Tỉ lệ hiển thị 2 chữ số thập phân. Chi phí = 0 thì hiện "Không tính được".
@@ -58,7 +61,7 @@ Chi tiết trong `docs/PHAN-TICH-DE.md`. Tóm tắt:
 - Nạp dữ liệu mẫu khi đang có dữ liệu → hiện hộp thoại xác nhận trong trang trước khi thay.
 
 ## Kỹ thuật
-Vite + React + TypeScript. Bộ tính toán là hàm thuần trong `src/lib/calc/`, có 18 test Vitest khớp bảng số tính tay. Thư viện Excel (SheetJS) chỉ tải khi cần dùng. Biểu đồ vẽ bằng SVG tự viết.
+Vite + React + TypeScript. Bộ tính toán là hàm thuần trong `src/lib/calc/`, có 24 test Vitest khớp bảng số tính tay. Thư viện Excel (SheetJS) chỉ tải khi cần dùng. Biểu đồ vẽ bằng SVG tự viết.
 ```bash
 npm i
 npm run dev          # chạy thử

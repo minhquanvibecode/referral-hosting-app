@@ -387,6 +387,12 @@ select { min-height: var(--tap); font: inherit; font-size: 16px; padding: 8px 12
   .insight-control .segmented { min-width: 0; justify-self: end; width: auto; }
 }
 @media (min-width: 1024px) {
-  .sens-row { grid-template-columns: 170px minmax(0, 1fr); column-gap: 12px; align-items: center; }
+  .sens-row { grid-template-columns: 215px minmax(0, 1fr); column-gap: 12px; align-items: center; }
+  .sens-label { font-size: 14px; white-space: nowrap; }
   .sens-values { grid-column: 2; }
 }
+.svc-list { list-style: none; margin: 0; padding: 0; display: grid; }
+.svc-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--border); min-height: var(--tap); }
+.svc-row:last-child { border-bottom: 0; }
+.svc-name { display: grid; gap: 2px; font-weight: 600; min-width: 0; }
+.svc-name .hint { font-weight: 400; }

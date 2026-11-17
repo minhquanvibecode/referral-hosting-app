@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { Explain, ResponsiveTable, SegmentedControl } from '../components/ui'
+import { Explain, SegmentedControl } from '../components/ui'
 import { services } from '../config/seed'
 import type { Assumptions } from '../config/types'
 import { feasibility, sensitivity, serviceChecks, type ServiceCheck } from '../lib/calc/economics'
@@ -54,17 +54,17 @@ export function FeasibilityCard({ a, target, onTarget }: { a: Assumptions; targe
         `Tối đa = min(${formatVnd(f.maxByRatio)}; ${formatVnd(f.maxByAds)}) = ${formatVnd(f.max)} — chặt hơn: ${f.binding === 'ratio' ? 'mục tiêu DT/CP' : 'chi phí quảng cáo'}`,
       ]} />
       <h3>Theo từng dịch vụ (giá tháng đầu ÷ ưu đãi 2 phía)</h3>
-      <ResponsiveTable<ServiceCheck>
-        caption="Kiểm tra ưu đãi theo dịch vụ"
-        rows={checks}
-        rowKey={(c) => c.name}
-        columns={[
-          { key: 'name', header: 'Dịch vụ', primary: true, render: (c) => <span className="nowrap">{c.name}</span> },
-          { key: 'price', header: 'Giá', align: 'right', render: (c) => formatVnd(c.price) },
-          { key: 'ratio', header: 'Giá ÷ ưu đãi', align: 'right', render: (c) => times(c.ratio) },
-          { key: 'level', header: 'Đánh giá', render: (c) => <span className={`badge ${LEVEL_CLASS[c.level]}`}>{LEVEL_TEXT[c.level]}</span> },
-        ]}
-      />
+      <ul className="svc-list" aria-label="Kiểm tra ưu đãi theo dịch vụ">
+        {checks.map((c) => (
+          <li key={c.name} className="svc-row">
+            <span className="svc-name">
+              {c.name}
+              <span className="hint nowrap">{formatVnd(c.price)} · {times(c.ratio)}</span>
+            </span>
+            <span className={`badge ${LEVEL_CLASS[c.level]}`}>{LEVEL_TEXT[c.level]}</span>
+          </li>
+        ))}
+      </ul>
       <p className="hint">Gợi ý: dịch vụ "Lỗ tháng đầu" chỉ nên áp ưu đãi khi mua kèm hosting.</p>
     </section>
   )
