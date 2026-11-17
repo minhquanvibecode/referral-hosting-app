@@ -8,6 +8,7 @@ export type TabItem = { id: string; label: string; icon?: ReactNode }
 /** Khung app: header → thanh tab (đáy trên di động, đầu trang trên desktop) → nội dung → chân trang. */
 export function AppShell(props: {
   title: string
+  logo?: ReactNode // logo thương hiệu cạnh tiêu đề
   subtitle?: ReactNode // ví dụ nhãn nguồn dữ liệu
   tabs: TabItem[]
   active: string
@@ -18,8 +19,13 @@ export function AppShell(props: {
   return (
     <>
       <header className="app-header">
-        <h1>{props.title}</h1>
-        {props.subtitle && <div className="data-source">{props.subtitle}</div>}
+        <div className="brand">
+          {props.logo}
+          <div className="brand-text">
+            <h1>{props.title}</h1>
+            {props.subtitle && <div className="data-source">{props.subtitle}</div>}
+          </div>
+        </div>
       </header>
       <nav className="tabbar" aria-label="Điều hướng chính">
         {props.tabs.map((t) => (

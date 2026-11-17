@@ -80,7 +80,7 @@ function Inner() {
       <>
         <span className={`badge ${s.kind === 'sample' ? 'src-sample' : 'src-real'}`}>{text}</span>
         {s.edited && <span className="badge changed">đã chỉnh</span>}
-        <span>· Mô phỏng, lưu trên máy này</span>
+        <span className="desktop-only">· Mô phỏng, lưu trên máy này</span>
       </>
     )
   }, [data])
@@ -105,7 +105,7 @@ function Inner() {
   const store: Store | null = data ? { data, update } : null
 
   return (
-    <AppShell title="Giới thiệu khách – Hosting & Domain" subtitle={sourceLabel} tabs={TABS} active={tab} onTab={(id) => go(id)} footer={<VersionFooter />}>
+    <AppShell title="Giới thiệu khách – Hosting & Domain" logo={<img className="brand-logo" src="./logo.jpg" alt="Logo RAUMA" width="44" height="44" />} subtitle={sourceLabel} tabs={TABS} active={tab} onTab={(id) => go(id)} footer={<VersionFooter />}>
       {tab === 'rules' ? (
         <RulesPage assumptions={data?.assumptions ?? sampleAssumptions} />
       ) : tab === 'data' ? (

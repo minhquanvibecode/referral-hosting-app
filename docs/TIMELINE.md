@@ -12,3 +12,4 @@
 14:21 — B6 — bỏ cPanel theo quyết định chủ dự án, chỉ dùng link Pages
 14:29 — B4 bổ sung — ngưỡng ưu đãi khả thi + độ nhạy ±10% (24 test, check:ui 0 lỗi, duyệt 390 & 1280)
 14:32 — sửa theo phản hồi: chọn kịch bản (nút + thẻ bấm được), Cách tính giãn hết hàng khi mở, 'đ' không tách dòng
+14:35 — thêm logo RAUMA (đầu trang + favicon + icon iPhone), đầu trang di động gọn 1 dòng
